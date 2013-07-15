@@ -1,0 +1,2 @@
+ImageRepository.o: ImageRepository.cpp ImageRepository.h ImageClass.h \
+  Image.h config.h
