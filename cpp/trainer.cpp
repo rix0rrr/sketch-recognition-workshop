@@ -116,7 +116,7 @@ int main(void) {
         svm.save("learned-svm.dat");
 
         // Validation
-        validate(trainingSet, words, svm);
+        validate(validationSet, words, svm);
 
         return 0;
     }

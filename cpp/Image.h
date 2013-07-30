@@ -22,6 +22,8 @@ public:
      * Returns true if the image was added succesfully (may return false for an non-image)
      */
     bool loadVisualWords(cv::Mat &into, const cv::Mat &visualWords) const;
+
+    boost::filesystem::path filename() const { return m_filename; }
 private:
     boost::filesystem::path m_filename;
     bool m_silent;

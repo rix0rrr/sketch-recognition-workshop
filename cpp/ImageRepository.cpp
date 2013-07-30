@@ -44,6 +44,17 @@ ImageClass ImageRepository::makeClass(boost::filesystem::path directory)
     return ret;
 }
 
+void pv(const ImageList &images) 
+{
+    cout << "[ ";
+    for (ImageList::const_iterator i = images.begin(); i != images.end(); ++i)
+    {
+        std::cout << i->filename() << ' ';
+    }
+    cout << "]" << endl;
+}
+        
+
 void partition(const ImageClassList &source, float fractionA, ImageClassList &targetA, ImageClassList &targetB)
 {
     for (ImageClassList::const_iterator iter = source.begin(); iter != source.end(); iter++)
@@ -56,8 +67,11 @@ void partition(const ImageClassList &source, float fractionA, ImageClassList &ta
         ImageClass A(copy);
         ImageClass B(copy);
 
-        A.remove(fraction, A.image_count());
+        // Partition into
+        // [...... A ........ | .... B ....]
+        // 0              fraction       count
         B.remove(0, fraction);
+        A.remove(fraction, A.image_count());
 
         targetA.push_back(A);
         targetB.push_back(B);
