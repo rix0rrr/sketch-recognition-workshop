@@ -35,6 +35,7 @@ ImageClass ImageRepository::makeClass(boost::filesystem::path directory)
     int i = 0;
     for (directory_iterator it = directory_iterator(directory); it != directory_iterator(); it++)
     {
+        if (basename(it->path()).at(0) == '.') continue;
         ret.include(*it);
 
         if (++i == MAX_IMAGES_PER_CLASS) break; // Early abort for debugging
