@@ -5,37 +5,49 @@
 #include <iostream>
 #include <algorithm>
 
+#include <opencv2/ml/ml.hpp>
+
 #include "ImageRepository.h"
 
 using namespace std;
 using namespace boost;
 using namespace cv;
 
-int main(void) {
+void loadClassifier(cv::Mat &words, CvSVM &svm) 
+{
+    cv::FileStorage fs("learned-vocabulary.dat", FileStorage::READ);
+    fs["vocabulary"] >> words;
+    fs.release();
+
+    svm.load("learned-svm.dat");
+}
+
+int main(int argc, char* argv[])
+{
+    if (argc == 1)
+    {
+        cerr << "Usage: recognizer IMAGE [IMAGE]" << endl;
+        return 1;
+    }
+
     try
     {
-        // Load all patches of all classes
-        ImageRepository images("../images/jpg");
-        ImageClassList classes = images.classes();
+        cv::Mat words;
+        CvSVM svm;
+        loadClassifier(words, svm);
 
-        Mat patches(0, HSV_PATCH_LENGTH, CV_32F);
-        for (ImageClassList::iterator it = classes.begin(); it != classes.end(); it++)
+        for (int i = 1; i < argc; i++)
         {
-            it->loadPatches(patches);
+            boost::filesystem::path filename(argv[i]);
+            Image image(filename, true);
+
+            cv::Mat imageWords(0, words.size().height, CV_32F);
+            image.loadVisualWords(imageWords, words);
+
+            float prediction = svm.predict(imageWords);
+
+            cout << argv[i] << " " << prediction << endl;
         }
-
-        // K-means
-        cout << "Clustering..." << endl;
-        int K = min(patches.size().height, VISUAL_WORD_COUNT);
-
-        Mat labels;
-        Mat centers;
-        kmeans(patches, K, labels, TermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS, 10000, 0.0001),
-                5, // attempts
-                KMEANS_PP_CENTERS, centers);
-
-        cout << centers << endl;
-
         return 0;
     }
     catch (const std::exception &ex)

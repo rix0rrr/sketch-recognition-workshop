@@ -1,32 +1,42 @@
 #CXX=g++
 
-SRCS    := recognizer.cpp ImageRepository.cpp rgb_to_hsv.cpp ImageClass.cpp Image.cpp
-OBJS    := ${SRCS:.cpp=.o} 
-DEPS    := ${SRCS:.cpp=.dep} 
-XDEPS   := $(wildcard ${DEPS}) 
+TRAINER_SRCS := trainer.cpp ImageRepository.cpp rgb_to_hsv.cpp ImageClass.cpp Image.cpp util.cpp
+TRAINER_OBJS := ${TRAINER_SRCS:.cpp=.o} 
+TRAINER_DEPS := ${TRAINER_SRCS:.cpp=.dep} 
 
-TARGET  := recognizer
+RECOGNIZER_SRCS := recognizer.cpp Image.cpp rgb_to_hsv.cpp
+RECOGNIZER_OBJS := ${RECOGNIZER_SRCS:.cpp=.o} 
+RECOGNIZER_DEPS := ${RECOGNIZER_SRCS:.cpp=.dep} 
+
+XDEPS   := $(wildcard ${TRAINER_DEPS}) $(wildcard ${RECOGNIZER_DEPS}) 
+
+TRAINER_TARGET    := trainer
+RECOGNIZER_TARGET := recognizer
+TARGETS           := ${TRAINER_TARGET} ${RECOGNIZER_TARGET}
 
 ifeq (${WIN},yes)
-TARGET  := bothead-win/bothead
-LIBS     = -lopencv_core 
-CXXFLAGS = -O2 -Wall -I../../shared -I../lib/curses  -I../lib/pthread/include -I../lib/d2xx/lib-win
-LDFLAGS  = -L../lib/pthread/lib ${XLDFLAGS}
+#TARGET  := bothead-win/bothead
+#LIBS     = -lopencv_core -lopencv_ml
+#CXXFLAGS = -O2 -Wall -I../../shared -I../lib/curses  -I../lib/pthread/include -I../lib/d2xx/lib-win
+#LDFLAGS  = -L../lib/pthread/lib ${XLDFLAGS}
 else
 # Otherwise, lib should be installed into /usr/lib
-LIBS     = -lopencv_core -lopencv_highgui -lboost_filesystem-mt -lboost_system-mt
+LIBS     = -lopencv_core -lopencv_highgui -lopencv_ml -lboost_filesystem-mt -lboost_system-mt
 CXXFLAGS = -O2 -Wall
 LDFLAGS  = ${XLDFLAGS}
 endif
 
 .PHONY: all clean distclean test
-all:: ${TARGET} 
+all:: ${TARGETS} 
 
 ifneq (${XDEPS},) 
 include ${XDEPS} 
 endif 
 
-${TARGET}: ${OBJS} 
+${TRAINER_TARGET}: ${TRAINER_OBJS} 
+	${CXX} ${LDFLAGS} -o $@ $^ ${LIBS} 
+
+${RECOGNIZER_TARGET}: ${RECOGNIZER_OBJS} 
 	${CXX} ${LDFLAGS} -o $@ $^ ${LIBS} 
 
 ${OBJS}: %.o: %.cpp %.dep 

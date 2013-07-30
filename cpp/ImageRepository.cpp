@@ -37,8 +37,28 @@ ImageClass ImageRepository::makeClass(boost::filesystem::path directory)
     {
         ret.include(*it);
 
-        if (++i == 3) break; // Early abort for debugging
+        if (++i == MAX_IMAGES_PER_CLASS) break; // Early abort for debugging
     }
 
     return ret;
+}
+
+void partition(const ImageClassList &source, float fractionA, ImageClassList &targetA, ImageClassList &targetB)
+{
+    for (ImageClassList::const_iterator iter = source.begin(); iter != source.end(); iter++)
+    {
+        ImageClass copy(*iter);
+        copy.shuffle();
+
+        int fraction = copy.image_count() * fractionA;
+
+        ImageClass A(copy);
+        ImageClass B(copy);
+
+        A.remove(fraction, A.image_count());
+        B.remove(0, fraction);
+
+        targetA.push_back(A);
+        targetB.push_back(B);
+    }
 }

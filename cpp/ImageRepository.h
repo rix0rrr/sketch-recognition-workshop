@@ -24,4 +24,11 @@ private:
     ImageClass makeClass(boost::filesystem::path directory);
 };
 
+/**
+ * Partition the input data set into two sets, respecting classes.
+ *
+ * The first set contains the given fraction of the total samples (0 <= oneFraction < 1)
+ */
+void partition(const ImageClassList &source, float fractionA, ImageClassList &targetA, ImageClassList &targetB);
+
 #endif
