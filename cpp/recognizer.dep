@@ -1,2 +1,0 @@
-recognizer.o: recognizer.cpp ImageRepository.h ImageClass.h Image.h \
-  config.h

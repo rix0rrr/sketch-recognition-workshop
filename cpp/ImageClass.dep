@@ -1,1 +1,0 @@
-ImageClass.o: ImageClass.cpp ImageClass.h Image.h config.h

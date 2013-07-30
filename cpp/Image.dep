@@ -1,1 +1,0 @@
-Image.o: Image.cpp Image.h config.h rgb_to_hsv.h
