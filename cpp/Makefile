@@ -8,6 +8,8 @@ RECOGNIZER_SRCS := recognizer.cpp Image.cpp rgb_to_hsv.cpp
 RECOGNIZER_OBJS := ${RECOGNIZER_SRCS:.cpp=.o} 
 RECOGNIZER_DEPS := ${RECOGNIZER_SRCS:.cpp=.dep} 
 
+OBJS    := $(sort ${TRAINER_OBJS} ${RECOGNIZER_OBJS})
+DEPS    := $(sort ${TRAINER_DEPS} ${RECOGNIZER_DEPS})
 XDEPS   := $(wildcard ${TRAINER_DEPS}) $(wildcard ${RECOGNIZER_DEPS}) 
 
 TRAINER_TARGET    := trainer
