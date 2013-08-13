@@ -1,6 +1,16 @@
-*.dep
-*.o
-*.dat
-cpp/trainer
-cpp/recognizer
-.DS_Store
+**/learned-svm.dat
+**/learned-vocabulary.dat
+
+# Visual Studio 2010
+*.sdf
+*.opensdf
+*.suo
+**/*.vcxproj.user
+**/*.vcxproj.filters
+
+bin/
+cpp/obj/
+cpp/ipch/
+
+boost/
+opencv/
