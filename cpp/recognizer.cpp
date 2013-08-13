@@ -7,7 +7,7 @@
 
 #include <opencv2/ml/ml.hpp>
 
-#include "ImageRepository.h"
+#include "Image.h"
 
 using namespace std;
 using namespace boost;
