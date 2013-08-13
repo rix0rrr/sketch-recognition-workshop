@@ -11,11 +11,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ClassLabelsFile.h" />
     <ClInclude Include="config.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="rgb_to_hsv.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ClassLabelsFile.cpp" />
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="rgb_to_hsv.cpp" />
   </ItemGroup>

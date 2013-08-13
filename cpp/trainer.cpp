@@ -9,6 +9,7 @@
 
 #include "ImageRepository.h"
 #include "util.h"
+#include "ClassLabelsFile.h"
 
 using namespace std;
 using namespace boost;
@@ -89,6 +90,16 @@ void validate(const ImageClassList &imageSet, const cv::Mat &words, const CvSVM 
     cout << "Accuracy: " << (accurate / total) * 100 << "%" << endl;
 }
 
+void StoreClassLabels(ImageClassList classes)
+{
+    std::map<int, std::string> labels;
+    for (ImageClassList::iterator it = classes.begin(); it != classes.end(); it++)
+    {
+        labels[it->intLabel()] = it->getLabel();
+    }
+    ClassLabelsFile::Save(labels);
+}
+
 int main(void) {
     try
     {
@@ -98,7 +109,9 @@ int main(void) {
         // Load classes
         ImageRepository images("../images/jpg");
         ImageClassList classes = images.classes();
-        
+
+        StoreClassLabels(classes);		
+
         // Split dataset into training and validation
         ImageClassList trainingSet;
         ImageClassList validationSet;

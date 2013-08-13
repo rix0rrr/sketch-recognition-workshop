@@ -1,5 +1,6 @@
-**/learned-svm.dat
-**/learned-vocabulary.dat
+cpp/learned-svm.dat
+cpp/learned-vocabulary.dat
+cpp/classlabels.txt
 
 # Visual Studio 2010
 *.sdf

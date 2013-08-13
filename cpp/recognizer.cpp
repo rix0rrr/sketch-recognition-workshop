@@ -8,6 +8,7 @@
 #include <opencv2/ml/ml.hpp>
 
 #include "Image.h"
+#include "ClassLabelsFile.h"
 
 using namespace std;
 using namespace boost;
@@ -32,6 +33,8 @@ int main(int argc, char* argv[])
 
     try
     {
+        std::map<int, std::string> classLabels = ClassLabelsFile::Load();
+
         cv::Mat words;
         CvSVM svm;
         loadClassifier(words, svm);
@@ -45,8 +48,10 @@ int main(int argc, char* argv[])
             image.loadVisualWords(imageWords, words);
 
             float prediction = svm.predict(imageWords);
+            int predictedClass = static_cast<int>(prediction);
+            std::string classLabel = classLabels[predictedClass];
 
-            cout << argv[i] << " " << prediction << endl;
+            cout << argv[i] << " " << classLabel << endl;
         }
         return 0;
     }
