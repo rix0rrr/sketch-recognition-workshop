@@ -29,6 +29,6 @@ private:
  *
  * The first set contains the given fraction of the total samples (0 <= oneFraction < 1)
  */
-void partition(const ImageClassList &source, float fractionA, ImageClassList &targetA, ImageClassList &targetB);
+void partition(const ImageClassList &source, double fractionA, ImageClassList &targetA, ImageClassList &targetB);
 
 #endif

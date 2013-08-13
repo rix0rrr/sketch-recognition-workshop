@@ -55,14 +55,14 @@ void pv(const ImageList &images)
 }
         
 
-void partition(const ImageClassList &source, float fractionA, ImageClassList &targetA, ImageClassList &targetB)
+void partition(const ImageClassList &source, double fractionA, ImageClassList &targetA, ImageClassList &targetB)
 {
     for (ImageClassList::const_iterator iter = source.begin(); iter != source.end(); iter++)
     {
         ImageClass copy(*iter);
         copy.shuffle();
 
-        int fraction = copy.image_count() * fractionA;
+        int fraction = static_cast<int>(copy.image_count() * fractionA);
 
         ImageClass A(copy);
         ImageClass B(copy);
