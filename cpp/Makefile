@@ -1,10 +1,10 @@
 #CXX=g++
 
-TRAINER_SRCS := trainer.cpp ImageRepository.cpp rgb_to_hsv.cpp ImageClass.cpp Image.cpp util.cpp
+TRAINER_SRCS := trainer.cpp ImageRepository.cpp rgb_to_hsv.cpp ImageClass.cpp Image.cpp util.cpp ClassLabelsFile.cpp
 TRAINER_OBJS := ${TRAINER_SRCS:.cpp=.o} 
 TRAINER_DEPS := ${TRAINER_SRCS:.cpp=.dep} 
 
-RECOGNIZER_SRCS := recognizer.cpp Image.cpp rgb_to_hsv.cpp
+RECOGNIZER_SRCS := recognizer.cpp Image.cpp rgb_to_hsv.cpp ClassLabelsFile.cpp
 RECOGNIZER_OBJS := ${RECOGNIZER_SRCS:.cpp=.o} 
 RECOGNIZER_DEPS := ${RECOGNIZER_SRCS:.cpp=.dep} 
 
