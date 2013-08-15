@@ -51,7 +51,13 @@ int main(int argc, char* argv[])
             int predictedClass = static_cast<int>(prediction);
             std::string classLabel = classLabels[predictedClass];
 
-            cout << argv[i] << " " << classLabel << endl;
+            if (argc == 2) {
+                // One image, one output
+                cout << classLabel << endl;
+            } else {
+                // Multiple files, list filenames and labels
+                cout << argv[i] << " " << classLabel << endl;
+            }
         }
         return 0;
     }
