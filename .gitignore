@@ -9,6 +9,13 @@ cpp/classlabels.txt
 **/*.vcxproj.user
 **/*.vcxproj.filters
 
+*.o
+*.dep
+*.dat
+
+cpp/recognizer
+cpp/trainer
+
 bin/
 cpp/obj/
 cpp/ipch/
