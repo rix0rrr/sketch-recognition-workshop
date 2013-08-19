@@ -107,7 +107,7 @@ int main(void) {
         std::srand (unsigned ( std::time(0) ) );
 
         // Load classes
-        ImageRepository images("../images/jpg");
+        ImageRepository images("../images");
         ImageClassList classes = images.classes();
 
         StoreClassLabels(classes);		
