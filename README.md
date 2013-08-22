@@ -47,6 +47,14 @@ The solution will compile everything to a `bin\Debug` or `bin\Release` subdirect
 
 The projects have two hardcoded dependency directories for Boost and OpenCV.
 
+### Mac OS X ###
+
+You'll need:
+
+- XCode command line tools (first install XCode, then inside XCode preferences install the command-line tools)
+- Homebrew if you don't already have it (http://brew.sh/) 
+- And then use that to install boost and opencv (brew install boost opencv).
+
 #### Boost ####
 
 The solution expects Boost to be located in the `boost` subdirectory in the root of the repository. It should contain another `boost` subdirectory containing the header files and a `lib32-msvc-10.0` subdirectory containing the libraries.
