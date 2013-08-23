@@ -18,7 +18,7 @@ void Image::loadPatches(Mat &into) const
 {
     if (!m_silent) cout << m_filename.string() << endl;
 
-    Mat image = imread(m_filename.string(), CV_LOAD_IMAGE_COLOR);
+    Mat image = cvLoadImage(m_filename.string().c_str(), CV_LOAD_IMAGE_COLOR);
     if (image.data == NULL) return;
 
     for (int y = 0; y < image.size().height - PATCH_SIZE; y += PATCH_STRIDE) 
