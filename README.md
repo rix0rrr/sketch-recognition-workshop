@@ -43,7 +43,9 @@ The application uses [Boost](http://www.boost.org/) and [OpenCV 2](http://opencv
 
 Windows users can use Visual Studio 2010 to compile everything. The solution contains three projects. One library project that is used by the other two, a project `trainer` and a project `recognizer`. If you run them from Visual Studio then everything will work automagically.
 
-The solution will compile everything to a `bin\Debug` or `bin\Release` subdirectory in the root. If you want to run this from the command-line, then you have to make sure that your working directory (i.e. the location where you invoke the executables) is `cpp`, otherwise the trainer cannot find the images it needs.
+If you use the provided Boost and OpenCV libraries, you *must* build the release build (because they have been built as Release as well), otherwise the program won't work properly.
+
+The solution will compile everything to `bin\Release` subdirectory in the root. If you want to run this from the command-line, then you have to make sure that your working directory (i.e. the location where you invoke the executables) is `cpp`, otherwise the trainer cannot find the images it needs.
 
 The projects have two hardcoded dependency directories for Boost and OpenCV.
 
