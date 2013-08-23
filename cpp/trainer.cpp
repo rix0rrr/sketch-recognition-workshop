@@ -6,6 +6,7 @@
 #include <algorithm>
 
 #include <opencv2/ml/ml.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
 
 #include "ImageRepository.h"
 #include "util.h"
@@ -30,6 +31,11 @@ cv::Mat findVocabulary(ImageClassList classes)
     // K-means to find visual words
     cout << "(VOCABULARY) Clustering..." << endl;
     int K = min(patches.size().height, VISUAL_WORD_COUNT);
+
+	if (K == 0) {
+		cerr << "Could not load any patches" << endl;
+		exit(1);
+	}
 
     Mat finalKMeansLabels;
     Mat words;
@@ -133,8 +139,9 @@ int main(void) {
 
         return 0;
     }
-    catch (const std::exception &ex)
+    catch (const cv::Exception &ex)
     {
         std::cerr << ex.what() << endl;
     }
 }
+
