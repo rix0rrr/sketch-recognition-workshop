@@ -12,7 +12,7 @@
 
 typedef cv::Vec<float, HSV_PATCH_LENGTH> Patch;
 
-#define VISUAL_WORD_COUNT 10
+#define VISUAL_WORD_COUNT 50
 
 // Gamma parameter of the SVM
 #define SVM_GAMMA 0.5
