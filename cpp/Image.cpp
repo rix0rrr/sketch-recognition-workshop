@@ -2,13 +2,17 @@
 #include <iostream>
 #include <limits>
 #include <cassert>
+#include <cmath>
 
 #include "util.h"
 #include "Image.h"
 #include "rgb_to_hsv.h"
+#include "hogdescriptor_visu.h"
 
 using namespace cv;
 using namespace std;
+
+bool g_debugPatches = false;
 
 Image::Image(boost::filesystem::path filename, bool silent) : m_filename(filename), m_silent(silent)
 {
@@ -18,39 +22,76 @@ void Image::loadPatches(Mat &into) const
 {
     if (!m_silent) cout << m_filename.string() << endl;
 
-    Mat image = imread(m_filename.string().c_str(), CV_LOAD_IMAGE_COLOR);
-    if (image.data == NULL) return;
+    Mat anySize = imread(m_filename.string().c_str(), CV_LOAD_IMAGE_GRAYSCALE);
+    if (anySize.data == NULL) return;
 
-    for (int y = 0; y < image.size().height - PATCH_SIZE; y += PATCH_STRIDE) 
+    Mat image;
+    resize(anySize, image, Size(IMAGE_SIZE, IMAGE_SIZE), 0, 0, INTER_LINEAR);
+
+    for (int y = 0; y < image.size().height - PATCH_SIZE + 1; y += PATCH_STRIDE) 
     {
-        for (int x = 0; x < image.size().width - PATCH_SIZE; x += PATCH_STRIDE)
+        for (int x = 0; x < image.size().width - PATCH_SIZE + 1; x += PATCH_STRIDE)
         {
-            Mat patch(image, Rect(x, y, PATCH_SIZE, PATCH_SIZE));
-            addHistogram(into, patch);
+            addHistogram(into, image, x, y);
         }
     }
 }
 
-void Image::addHistogram(cv::Mat &into, const cv::Mat &patch) const
+void Image::addHistogram(cv::Mat &into, const cv::Mat &image, int patch_x, int patch_y) const
 {
-    cv::Mat p = cv::Mat::zeros(1, HSV_PATCH_LENGTH, CV_32F);
+    // Patches are 32x32 pixels, will be divided into 4x4 cells, out of which
+    // a histogram of gradients will be made.
+    cv::Mat p = cv::Mat::zeros(1, PATCH_CELLS * PATCH_CELLS * GRADIENT_BINS, CV_32F);
 
-    typedef MatConstIterator_<Vec3b> iter;
-    for (iter it = patch.begin<Vec3b>(); it != patch.end<Vec3b>(); it++)
+    for (int j = 0; j < PATCH_CELLS; j++)
     {
-        rgb_color_t rgb = { (double)(*it)[2] / 255, (double)(*it)[1] / 255, (double)(*it)[0] / 255 };
-        hsv_color_t hsv = rgb_to_hsv(rgb);
+        for (int i = 0; i < PATCH_CELLS; i++)
+        {
+            int x = patch_x + i * CELL_SIZE;
+            int y = patch_y + j * CELL_SIZE;
 
-        int hbin = min((int)((hsv.hue / 360) * HSV_HISTOGRAM_BINS), HSV_HISTOGRAM_BINS - 1);
-        int sbin = min((int)(hsv.sat * HSV_HISTOGRAM_BINS), HSV_HISTOGRAM_BINS - 1);
-        int vbin = min((int)(hsv.val * HSV_HISTOGRAM_BINS), HSV_HISTOGRAM_BINS - 1);
-
-        p.at<float>(hbin)                          = p.at<float>(hbin) + 1;
-        p.at<float>(sbin +     HSV_HISTOGRAM_BINS) = p.at<float>(sbin + HSV_HISTOGRAM_BINS) + 1;
-        p.at<float>(vbin + 2 * HSV_HISTOGRAM_BINS) = p.at<float>(vbin + 2 * HSV_HISTOGRAM_BINS) + 1;
+            addCellHoG(p, (j * PATCH_CELLS + i) * GRADIENT_BINS, image, x, y);
+        }
     }
 
-    into.push_back(p);
+    cv::Mat normalized;
+    cv::normalize(p, normalized);
+    into.push_back(normalized);
+
+    if (g_debugPatches) {
+        Mat visualizedWords = get_hogdescriptor_visu(image, normalized, patch_x, patch_y);
+        imshow("Bla", visualizedWords);
+        waitKey();
+    }
+
+    into.push_back(normalized);
+}
+
+void Image::addCellHoG(cv::Mat &into, int matIndex, const cv::Mat &image, int cell_x, int cell_y) const
+{
+    Mat cell(image, Rect(cell_x, cell_y, CELL_SIZE, CELL_SIZE));
+
+    for (int y = 0; y < CELL_SIZE; y++)
+    {
+        for (int x = 0; x < CELL_SIZE; x++)
+        {
+            if ((cell_x + x) <= 0 || (cell_y + y) <= 0 || (cell_x + x) >= image.size().width - 1 || (cell_y + y) >= image.size().height - 1) continue;
+
+//            cout << x << " " << y << image.at<uchar>(x, y) << endl;
+
+            double dIdx = cell.at<uchar>(x + 1, y) - cell.at<uchar>(x - 1, y);
+            double dIdy = cell.at<uchar>(x, y + 1) - cell.at<uchar>(x, y - 1);
+
+            if (dIdx != 0 || dIdy != 0) {
+                double theta = dIdx != 0 ? atan(dIdy / dIdx) : 0.5 * M_PI;
+
+                // Determine bin number
+                int bin = min((int)((theta + 0.5 * M_PI) / GRADIENT_BIN_WIDTH), GRADIENT_BINS - 1);
+
+                into.at<float>(bin + matIndex) = into.at<float>(bin + matIndex) + 1;
+            }
+        }
+    }
 }
 
 bool Image::loadVisualWords(cv::Mat &into, const cv::Mat &visualWords) const

@@ -3,16 +3,21 @@
 
 
 // How many patches to take from each image
-#define PATCH_SIZE 70
-#define PATCH_STRIDE 50
+#define IMAGE_SIZE 256
+#define PATCH_SIZE 32
+#define PATCH_STRIDE 8
 
-// How many bins to use in the patch histogram
-#define HSV_HISTOGRAM_BINS 10
-#define HSV_PATCH_LENGTH (HSV_HISTOGRAM_BINS * 3) 
+#define PATCH_CELLS 4
+#define GRADIENT_BINS 4
 
-typedef cv::Vec<float, HSV_PATCH_LENGTH> Patch;
+#define GRADIENT_BIN_WIDTH (M_PI / GRADIENT_BINS)
+#define CELL_SIZE (PATCH_SIZE / PATCH_CELLS)
 
-#define VISUAL_WORD_COUNT 50
+#define PATCH_LENGTH ((PATCH_SIZE / PATCH_STRIDE) * (PATCH_SIZE / PATCH_STRIDE) * GRADIENT_BINS)
+
+typedef cv::Vec<float, PATCH_LENGTH> Patch;
+
+#define VISUAL_WORD_COUNT 500
 
 // Gamma parameter of the SVM
 #define SVM_GAMMA 0.5

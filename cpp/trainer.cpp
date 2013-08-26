@@ -39,7 +39,7 @@ cv::Mat findVocabulary(ImageClassList classes)
 
     Mat finalKMeansLabels;
     Mat words;
-    kmeans(patches, K, finalKMeansLabels, TermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS, 10000, 0.0001),
+    kmeans(patches, K, finalKMeansLabels, TermCriteria(CV_TERMCRIT_ITER|CV_TERMCRIT_EPS, 100, 0.01),
             5, // attempts
             KMEANS_PP_CENTERS, words);
 
@@ -66,6 +66,7 @@ CvSVM trainClassifier(const cv::Mat &words, ImageClassList classes)
     params.term_crit   = cvTermCriteria(CV_TERMCRIT_ITER, 100, 1e-6);
 
     // Train the SVM
+    cout << "( CLASSIF. ) Training SVM..." << endl;
     CvSVM svm;
     svm.train_auto(trainingSet, trainingLabels, Mat(), Mat(), params);
     return svm;

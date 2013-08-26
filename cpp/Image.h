@@ -28,7 +28,9 @@ private:
     boost::filesystem::path m_filename;
     bool m_silent;
 
-    void addHistogram(cv::Mat &into, const cv::Mat &patch) const;
+    void addHistogram(cv::Mat &into, const cv::Mat &image, int patch_x, int patch_y) const;
+
+    void addCellHoG(cv::Mat &into, int matIndex, const cv::Mat &image, int cell_x, int cell_y) const;
 
     /**
      * Classify the given patch according to the given vocabulary
@@ -38,6 +40,8 @@ private:
     int classifyPatch(const cv::Mat &patch, const cv::Mat &visualWords) const;
 };
 
-#define PATCHES_MATRIX(NAME) Mat NAME(0, HSV_PATCH_LENGTH, CV_32F)
+extern bool g_debugPatches;
+
+#define PATCHES_MATRIX(NAME) Mat NAME(0, PATCH_LENGTH, CV_32F)
 
 #endif
