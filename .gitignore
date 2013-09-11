@@ -15,6 +15,7 @@ cpp/classlabels.txt
 
 cpp/recognizer
 cpp/trainer
+cpp/tester
 
 bin/
 cpp/obj/

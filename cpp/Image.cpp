@@ -18,6 +18,27 @@ Image::Image(boost::filesystem::path filename, bool silent) : m_filename(filenam
 {
 }
 
+Rect imageBoundingBox(const Mat &image) 
+{
+    int x0 = image.size().width, y0 = image.size().height, x1 = 0, y1 = 0;
+
+    for (int y = 0; y < image.size().height; y++)
+    {
+        for (int x = 0; x < image.size().width; x++)
+        {
+            if (image.at<uchar>(y, x) < 50) // Black (ish)
+            {
+                if (x < x0) x0 = x;
+                if (x > x1) x1 = x;
+                if (y < y0) y0 = y;
+                if (y > y1) y1 = y;
+            }
+        }
+    }
+
+    return Rect(x0, y0, x1 - x0 + 1, y1 - y0 + 1);
+}
+
 void Image::loadPatches(Mat &into) const
 {
     if (!m_silent) cout << m_filename.string() << endl;
@@ -25,8 +46,10 @@ void Image::loadPatches(Mat &into) const
     Mat anySize = imread(m_filename.string().c_str(), CV_LOAD_IMAGE_GRAYSCALE);
     if (anySize.data == NULL) return;
 
+    // Find bounding box of image and rescale
+
     Mat image;
-    resize(anySize, image, Size(IMAGE_SIZE, IMAGE_SIZE), 0, 0, INTER_LINEAR);
+    resize(Mat(anySize, imageBoundingBox(anySize)), image, Size(IMAGE_SIZE, IMAGE_SIZE), 0, 0, INTER_LINEAR);
 
     for (int y = 0; y < image.size().height - PATCH_SIZE + 1; y += PATCH_STRIDE) 
     {
@@ -79,8 +102,8 @@ void Image::addCellHoG(cv::Mat &into, int matIndex, const cv::Mat &image, int ce
 
 //            cout << x << " " << y << image.at<uchar>(x, y) << endl;
 
-            double dIdx = cell.at<uchar>(x + 1, y) - cell.at<uchar>(x - 1, y);
-            double dIdy = cell.at<uchar>(x, y + 1) - cell.at<uchar>(x, y - 1);
+            double dIdx = cell.at<uchar>(y, x + 1) - cell.at<uchar>(y, x - 1);
+            double dIdy = cell.at<uchar>(y + 1, x) - cell.at<uchar>(y - 1, x);
 
             if (dIdx != 0 || dIdy != 0) {
                 double theta = dIdx != 0 ? atan(dIdy / dIdx) : 0.5 * M_PI;

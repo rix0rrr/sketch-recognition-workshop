@@ -63,6 +63,7 @@ CvSVM trainClassifier(const cv::Mat &words, ImageClassList classes)
     params.svm_type    = CvSVM::C_SVC;
     params.kernel_type = CvSVM::RBF;
     params.gamma       = SVM_GAMMA;
+    params.C           = SVM_C;
     params.term_crit   = cvTermCriteria(CV_TERMCRIT_ITER, 100, 1e-6);
 
     // Train the SVM

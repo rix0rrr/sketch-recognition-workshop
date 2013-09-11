@@ -20,7 +20,8 @@ typedef cv::Vec<float, PATCH_LENGTH> Patch;
 #define VISUAL_WORD_COUNT 500
 
 // Gamma parameter of the SVM
-#define SVM_GAMMA 0.5
+#define SVM_GAMMA 17.8
+#define SVM_C 10
 
 // How much of the total image set should be devoted to the
 // training set (the remainder is used for the validation set)
