@@ -44,7 +44,10 @@ void Image::loadPatches(Mat &into) const
     if (!m_silent) cout << m_filename.string() << endl;
 
     Mat anySize = imread(m_filename.string().c_str(), CV_LOAD_IMAGE_GRAYSCALE);
-    if (anySize.data == NULL) return;
+    if (anySize.data == NULL) {
+        cout << "Failed" << endl;
+        return;
+    }
 
     // Find bounding box of image and rescale
 
@@ -108,10 +111,16 @@ void Image::addCellHoG(cv::Mat &into, int matIndex, const cv::Mat &image, int ce
             if (dIdx != 0 || dIdy != 0) {
                 double theta = dIdx != 0 ? atan(dIdy / dIdx) : 0.5 * M_PI;
 
-                // Determine bin number
-                int bin = min((int)((theta + 0.5 * M_PI) / GRADIENT_BIN_WIDTH), GRADIENT_BINS - 1);
+                // Map from [-1/2PI .. 1/2PI] to [0..4]
+                double bin = (theta + 0.5 * M_PI) / GRADIENT_BIN_WIDTH;
+                // We want the center of a bin to correspond to a complete increase of that bin
+                // otherwise, fractionally between bins
+                double left_bin = GRADIENT_BINS + bin - 0.5; // Make sure to remain positive
 
-                into.at<float>(bin + matIndex) = into.at<float>(bin + matIndex) + 1;
+                double left_fraction = 1 - (left_bin - (int)left_bin); // Closer is better
+
+                into.at<float>(matIndex + (int)left_bin % GRADIENT_BINS)       += left_fraction;
+                into.at<float>(matIndex + (int)(left_bin + 1) % GRADIENT_BINS) += 1 - left_fraction;
             }
         }
     }

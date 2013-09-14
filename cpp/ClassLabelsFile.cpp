@@ -1,5 +1,6 @@
 #include "ClassLabelsFile.h"
 #include <fstream>
+#include <sstream>
 
 #define CLASSLABELS_FILENAME "classlabels.txt"
 
@@ -9,18 +10,16 @@ std::map<int, std::string> ClassLabelsFile::Load()
     std::ifstream classFile;
     classFile.open(CLASSLABELS_FILENAME);
 
-    while (!classFile.eof())
+
+    std::string line;
+    while (std::getline(classFile, line))
     {
-        int intLabel = -1;
-        classFile >> intLabel;
+        int space = line.find(" ");
+        std::string label = line.substr(space + 1);
 
-        if (classFile.eof() || intLabel == -1)
-        {
-            break;
-        }
-
-        std::string label;
-        classFile >> label;
+        std::istringstream iss(line.substr(0, space));
+        int intLabel;
+        iss >> intLabel;
 
         list[intLabel] = label;
     }

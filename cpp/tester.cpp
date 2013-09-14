@@ -24,8 +24,7 @@ int main(void) {
         // Initialize random seed
         std::srand (unsigned ( std::time(0) ) );
 
-
-        boost::filesystem::path filename("../images/guitar/7640.png");
+        boost::filesystem::path filename("../images/megaphone/10220.png");
 
         Image image(filename, false);
         PATCHES_MATRIX(patches);
