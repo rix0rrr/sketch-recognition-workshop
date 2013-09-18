@@ -22,6 +22,7 @@ std::vector<ImageClass> ImageRepository::classes()
         if (is_directory(*it))
         {
             ret.push_back(makeClass(*it));
+            if (ret.size() >= MAX_CLASSES) break;
         }
     }
 

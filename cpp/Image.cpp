@@ -36,6 +36,22 @@ Rect imageBoundingBox(const Mat &image)
         }
     }
 
+    // Make sure the dimensions are sane
+    if (x1 < x0) std::swap(x0, x1);
+    if (y1 < y0) std::swap(y0, y1);
+
+    // Find the smallest bounding square
+    int longest_side = std::max(x1 - x0, y1 - y0);
+    x0 -= (longest_side - (x1 - x0)) / 2;
+    x1  = x0 + longest_side;
+    y0 -= (longest_side - (y1 - y0)) / 2;
+    y1  = y0 + longest_side;
+
+    if (x0 < 0) x0 = 0;
+    if (x1 >= image.size().width) x1 = image.size().width - 1;
+    if (y0 < 0) y0 = 0;
+    if (y1 >= image.size().height) y1 = image.size().height - 1;
+
     return Rect(x0, y0, x1 - x0 + 1, y1 - y0 + 1);
 }
 
@@ -103,10 +119,26 @@ void Image::addCellHoG(cv::Mat &into, int matIndex, const cv::Mat &image, int ce
         {
             if ((cell_x + x) <= 0 || (cell_y + y) <= 0 || (cell_x + x) >= image.size().width - 1 || (cell_y + y) >= image.size().height - 1) continue;
 
-//            cout << x << " " << y << image.at<uchar>(x, y) << endl;
-
+            // Calculate 1-pixel gradient
             double dIdx = cell.at<uchar>(y, x + 1) - cell.at<uchar>(y, x - 1);
             double dIdy = cell.at<uchar>(y + 1, x) - cell.at<uchar>(y - 1, x);
+            
+            // Use Sobel operator to calculate gradient for this pixel
+            /*
+            double dIdx =     cell.at<uchar>(y - 1, x + 1) 
+                        + 2 * cell.at<uchar>(y, x + 1)
+                        +     cell.at<uchar>(y + 1, x + 1)
+                        -     cell.at<uchar>(y - 1, x - 1)
+                        - 2 * cell.at<uchar>(y, x - 1)
+                        -     cell.at<uchar>(y + 1, x - 1);
+
+            double dIdy =     cell.at<uchar>(y + 1, x - 1)
+                        + 2 * cell.at<uchar>(y + 1, x)
+                        +     cell.at<uchar>(y + 1, x + 1)
+                        -     cell.at<uchar>(y + 1, x - 1)
+                        - 2 * cell.at<uchar>(y + 1, x)
+                        -     cell.at<uchar>(y - 1, x + 1);
+            */
 
             if (dIdx != 0 || dIdy != 0) {
                 double theta = dIdx != 0 ? atan(dIdy / dIdx) : 0.5 * M_PI;
