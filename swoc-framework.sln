@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "trainer", "cpp\trainer.vcxproj", "{8992E515-0E3E-445C-92C4-8E734DBAA03A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "recognizer", "cpp\recognizer.vcxproj", "{A3C01BEC-0095-433B-B32E-38E46CC3750D}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "imagelib", "cpp\imagelib.vcxproj", "{39CF2B68-C55B-456A-932B-D8095DBD993D}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8992E515-0E3E-445C-92C4-8E734DBAA03A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8992E515-0E3E-445C-92C4-8E734DBAA03A}.Debug|Win32.Build.0 = Debug|Win32
+		{8992E515-0E3E-445C-92C4-8E734DBAA03A}.Release|Win32.ActiveCfg = Release|Win32
+		{8992E515-0E3E-445C-92C4-8E734DBAA03A}.Release|Win32.Build.0 = Release|Win32
+		{A3C01BEC-0095-433B-B32E-38E46CC3750D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A3C01BEC-0095-433B-B32E-38E46CC3750D}.Debug|Win32.Build.0 = Debug|Win32
+		{A3C01BEC-0095-433B-B32E-38E46CC3750D}.Release|Win32.ActiveCfg = Release|Win32
+		{A3C01BEC-0095-433B-B32E-38E46CC3750D}.Release|Win32.Build.0 = Release|Win32
+		{39CF2B68-C55B-456A-932B-D8095DBD993D}.Debug|Win32.ActiveCfg = Debug|Win32
+		{39CF2B68-C55B-456A-932B-D8095DBD993D}.Debug|Win32.Build.0 = Debug|Win32
+		{39CF2B68-C55B-456A-932B-D8095DBD993D}.Release|Win32.ActiveCfg = Release|Win32
+		{39CF2B68-C55B-456A-932B-D8095DBD993D}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

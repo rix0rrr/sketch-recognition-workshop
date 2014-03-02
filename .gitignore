@@ -1,0 +1,26 @@
+cpp/learned-svm.dat
+cpp/learned-vocabulary.dat
+cpp/classlabels.txt
+
+# Visual Studio 2010
+*.sdf
+*.opensdf
+*.suo
+**/*.vcxproj.user
+**/*.vcxproj.filters
+
+*.o
+*.dep
+*.dat
+
+cpp/recognizer
+cpp/trainer
+
+bin/
+cpp/obj/
+cpp/ipch/
+
+boost/
+opencv/
+
+.DS_Store
