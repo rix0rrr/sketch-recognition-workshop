@@ -6,7 +6,7 @@ Compiling on Linux (Ubuntu)
     libcv-dev
     libopencv-contrib-dev
     libhighgui-dev
-    libboost-dev
+    libboost-all-dev
 
 - Go to the `cpp` subdirectory and run
 
