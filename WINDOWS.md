@@ -11,7 +11,7 @@ project `trainer` and a project `recognizer`. If you run them from Visual
 Studio then everything will work automagically.
 
 If you use the provided Boost and OpenCV libraries, you *must* build the
-release build (because they have been built as Release as well), otherwise the
+RELEASE build (because they have been built as Release as well), otherwise the
 program won't work properly.
 
 The solution will compile everything to `bin\Release` subdirectory in the root.

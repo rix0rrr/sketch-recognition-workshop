@@ -16,17 +16,22 @@ TRAINER_TARGET    := trainer
 RECOGNIZER_TARGET := recognizer
 TARGETS           := ${TRAINER_TARGET} ${RECOGNIZER_TARGET}
 
-ifeq (${WIN},yes)
-#TARGET  := bothead-win/bothead
-#LIBS     = -lopencv_core -lopencv_ml
-#CXXFLAGS = -O2 -Wall -I../../shared -I../lib/curses  -I../lib/pthread/include -I../lib/d2xx/lib-win
-#LDFLAGS  = -L../lib/pthread/lib ${XLDFLAGS}
+# Determine whether to use the -mt suffix or not for boost libraries
+ifneq ($(wildcard /usr/{local,}/lib/libboost_filesystem-mt.*),)
+BOOST_SUFFIX=-mt
 else
-# Otherwise, lib should be installed into /usr/lib
-LIBS     = -lopencv_core -lopencv_highgui -lopencv_ml -lboost_filesystem-mt -lboost_system-mt
+BOOST_SUFFIX=
+endif
+
+
+LIBS     = -lopencv_core \
+		   -lopencv_highgui \
+		   -lopencv_imgproc \
+		   -lopencv_ml \
+		   -lboost_filesystem${BOOST_SUFFIX} \
+		   -lboost_system${BOOST_SUFFIX}
 CXXFLAGS = -O2 -Wall
 LDFLAGS  = ${XLDFLAGS}
-endif
 
 .PHONY: all clean distclean test
 all:: ${TARGETS} 
